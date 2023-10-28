@@ -19,9 +19,8 @@ T = 1
 dt = T / n_timesteps
 
 sigma = 0
-k = np.arange(0,2,0.1)
-A = 140 # irrelevant for our purposes
-gamma = 0.1 # approach 0
+k = 1
+gamma = 0.1
 
 profit = []
 final_q = []
