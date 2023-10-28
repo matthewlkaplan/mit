@@ -7,28 +7,36 @@ Bot skeleton
 
 import random
 import math
-timestep = 0
 def submit_market(state, symbols, my_history, period_history, cur_position):
 
-
+    state = {}
+    for symbol in period_history:
+        price = 0
+        count = 0
+        for trade in period_history[symbol]:
+            price += trade["price"]
+            count += 1
+        price /= count
+        state[symbol] = price
 
     sigma = 0
     k = 1
     gamma = 0.1
-    timestep += 1
-    t = timestep / 50
-    q = cur_position
-    market = []
+    t = 1 / 50
+    q = 0
+    for i in (cur_position):
+        q += cur_position[i]
 
-    r_a = period_history["A"]["price"] - q * gamma * sigma**2 * (50 - t)
+
+    r_a = state['A'] - q * (gamma * sigma**2 * (50 - t))
     delta_a = gamma * sigma**2 * (50 - t) + 2 / gamma * math.log(1 + gamma / k)
 
 
-    r_b = period_history["B"]["price"] - q * gamma * sigma**2 * (50 - t)
+    r_b = state['B'] - q * gamma * sigma**2 * (50 - t)
     delta_b = gamma * sigma**2 * (50 - t) + 2 / gamma * math.log(1 + gamma / k)
     
 
-    r_c = period_history["C"]["price"] - q * gamma * sigma**2 * (50 - t)
+    r_c = state['C'] - q * gamma * sigma**2 * (50 - t)
     delta_c = gamma * sigma**2 * (50 - t) + 2 / gamma * math.log(1 + gamma / k)
 
     """
@@ -96,31 +104,31 @@ def submit_market(state, symbols, my_history, period_history, cur_position):
     return {
         "A": {
             "buy": {
-                    "price": state["buy_price"] + delta_a,
+                    "price": r_a + delta_a,
                     "size": 1
                     },
             "sell": {
-                    "price": state["sell_price"] - delta_a,
+                    "price": r_a - delta_a,
                     "size": 1
                     },
             },
         "B": {
             "buy": {
-                    "price": state["buy_price"] + delta_b,
+                    "price": r_b + delta_b,
                     "size": 2
                     },
             "sell": {
-                    "price": state["sell_price"] - delta_b,
+                    "price": r_b - delta_b,
                     "size": 2
                     },
             },
         "C": {
             "buy": {
-                    "price": state["buy_price"] + delta_c,
+                    "price": r_c + delta_c,
                     "size": 3
                     },
             "sell": {
-                    "price": state["sell_price"] - delta_c,
+                    "price": r_c - delta_c,
                     "size": 3
                     },
             }
